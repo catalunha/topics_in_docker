@@ -88,3 +88,46 @@ docker top `container_name` | Mostra processos de containers
 docker version | Mostra versao do docker
 docker inspect `object_name` | Pega detalhes sobre um objeto
 docker port `container_name` | Mostra as portas mapeadas de um container
+
+# Campos de Dockerfile
+Comando | Descrição
+---|---
+FROM `image_name`:`tag` | Imagem base para a nova imagem sendo criada
+MAINTAINER `email`| Mantenedor desta imagem
+COPY `host_path` `container_path` | Copia coisa do local para o container
+RUN `args` | Executa comando dentro de um container
+WORKDIR `container_path` | Define uma pasta padrao no container
+CMD `args` | Inicia comandos dentro do container ao ser iniciado
+ENV `name_variable` `value_variable` | Define variáveis de ambiente para o container
+
+## Dockerfile para postgres
+## Dockerfile para rabbitmq
+## Dockerfile para redis
+
+# docker-compose
+
+https://devhints.io/docker-compose
+
+Considere o seguinte docker-compose.yaml
+
+```yaml
+services:
+  `service_name`: Nome do serviço ou container. Pode ser postgres, redis, web, etc
+    # Build de um Dockerfile
+    build: .
+    # Build de um Dockerfile customizado
+    build:
+      context: ./path
+      dockerfile: Dockerfile.dev
+    # Build de uma imagem
+    image: `image_name`:`tag`
+    
+    ports:
+      - "3000"
+      - "8000:80" # host_port:container_port
+    # Expoe uma porta para um serviço vinculado (não para host)
+    expose: ["3000"] 
+    volumes: 
+```
+
+
