@@ -1,0 +1,1 @@
+https://priyanshuguptaofficial.medium.com/dockerizing-django-8d33a020852d

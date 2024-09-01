@@ -11,8 +11,32 @@ CMD `args` | Inicia comandos dentro do container ao ser iniciado
 ENV `name_variable` `value_variable` | Define variáveis de ambiente para o container
 EXPOSE [`port_container`] | Expoe que porta o container escuta
 
-## Dockerfile para postgres
+## Dockerfile para Postgres
 
-## Dockerfile para rabbitmq
+## Dockerfile para Rabbitmq
 
-## Dockerfile para redis
+## Dockerfile para Redis
+
+## Dockerfile para Python
+
+```Dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.txt /app/
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . /app/
+
+EXPOSE 8000
+
+CMD ['sh','-c','python manage.py migrate && python manage.py runserver 0.0.0.0:8000]
+```
+
+
+# Alguns tutoriais:
+
+https://youtu.be/FnGxwmtUK0c?list=PLMEVlrVfhrHvrEkfdm85z5_YSNOYKYW2g
+https://youtu.be/R8LyH6TCIUM?list=PLMEVlrVfhrHvrEkfdm85z5_YSNOYKYW2g

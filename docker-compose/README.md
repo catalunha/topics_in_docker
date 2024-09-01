@@ -3,6 +3,7 @@
 Comando | Descrição
 ---|---
 docker compose up | Cria os containers e inicia os serviços
+docker compose up --build | Constroe os containers e inicia os serviços
 docker compose start | Inicia os serviços
 docker compose stop | Para os serviços
 docker compose down | Para os serviços e remove os serviços, rede, etc

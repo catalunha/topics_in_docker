@@ -1,0 +1,1 @@
+Este é o docker compose do banco de dados do meu computador que atende várias aplicações.

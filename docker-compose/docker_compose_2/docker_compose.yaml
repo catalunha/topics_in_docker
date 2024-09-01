@@ -1,0 +1,153 @@
+version: '3.9'
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile.django
+    command: sh -c "python manage.py migrate && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - static_volume:/code/static
+      - media_volume:/code/media
+    environment:
+      - DJANGO_SETTINGS_MODULE=myproject.settings
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dummy-project-api.rule=Host(`yourdomain.com`)"
+      - "traefik.http.routers.dummy-project-api.entrypoints=websecure"
+      - "traefik.http.routers.dummy-project-api.tls.certresolver=myresolver"
+      - "traefik.http.services.dummy-project-api.loadbalancer.server.port=8000"
+    depends_on:
+      - migrate
+      - redis
+      - rabbitmq
+    # to keep the log file within a certain limit
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=dummy_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c "python manage.py migrate"
+    env_file:
+      - .env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "170m"
+        max-file: "5"
+    depends_on:
+      - db
+
+  redis:
+    image: redis:6
+    volumes:
+      - redis-data:/var/lib/redis/data/
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+
+  rabbitmq:
+    build:
+      context: .
+      dockerfile: Dockerfile.rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "170m"
+        max-file: "5"
+
+  celery:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    command: sh -c "celery -A config worker -l info  worker -E --pool=threads --concurrency=10 -l info --without-gossip --without-mingle"
+    env_file: .env
+    depends_on:
+      - migrate
+      - redis
+      - rabbitmq
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "170m"
+        max-file: "5"
+
+  celery-beat:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    command: sh -c "celery -A config beat -l info"
+    env_file: .env
+    depends_on:
+      - migrate
+      - redis
+      - rabbitmq
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "170m"
+        max-file: "5"
+
+  traefik:
+    image: "traefik:v2.9"
+    container_name: "traefik"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=traefik-public"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.myresolver.acme.email=your-email@example.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - traefik_letsencrypt:/letsencrypt
+    networks:
+      - traefik-public
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+
+volumes:
+  postgres_data:
+  traefik_letsencrypt:
+  static_volume:
+  media_volume:
+  redis-data:
+
+networks:
+  traefik-public:
+    external: true
