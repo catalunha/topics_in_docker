@@ -38,5 +38,9 @@ CMD ['sh','-c','python manage.py migrate && python manage.py runserver 0.0.0.0:8
 
 # Alguns tutoriais:
 
+## Docker e Docker Compose na prática | dockerizando uma aplicação Django com Celery | py_live #012
+https://youtu.be/R8LyH6TCIUM
+
+
 https://youtu.be/FnGxwmtUK0c?list=PLMEVlrVfhrHvrEkfdm85z5_YSNOYKYW2g
 https://youtu.be/R8LyH6TCIUM?list=PLMEVlrVfhrHvrEkfdm85z5_YSNOYKYW2g

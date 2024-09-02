@@ -49,3 +49,10 @@ sudo usermod -aG docker $(whoami)
 [Tutorial 02](https://levelup.gitconnected.com/docker-beginner-to-expert-tutorial-68555aa3e544)
 
 [Tutorial 03](https://github.com/wsargent/docker-cheat-sheet?tab=readme-ov-file#why-docker)
+
+## PyCodeBR
+### Docker e Docker Compose na prática | dockerizando uma aplicação Django com Celery | py_live #012
+https://youtu.be/R8LyH6TCIUM
+
+### Docker do zero: dockerizando uma aplicação Python e Django | py_live #007
+https://youtu.be/FnGxwmtUK0c
