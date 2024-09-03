@@ -35,12 +35,9 @@ EXPOSE 8000
 CMD ['sh','-c','python manage.py migrate && python manage.py runserver 0.0.0.0:8000]
 ```
 
+A clásula CMD no Dockerfile é o mesmo que o comand no docker-compose
+
 
 # Alguns tutoriais:
-
-## Docker e Docker Compose na prática | dockerizando uma aplicação Django com Celery | py_live #012
-https://youtu.be/R8LyH6TCIUM
-
-
 https://youtu.be/FnGxwmtUK0c?list=PLMEVlrVfhrHvrEkfdm85z5_YSNOYKYW2g
 https://youtu.be/R8LyH6TCIUM?list=PLMEVlrVfhrHvrEkfdm85z5_YSNOYKYW2g

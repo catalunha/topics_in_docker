@@ -10,28 +10,37 @@ docker compose down | Para os serviços e remove os serviços, rede, etc
 docker compose ls | Lista os arquivos de componse em execução
 docker compose -p `compose_project_name` ps | Lista os containers de um projeto compose
 
-Considere o seguinte docker-compose.yaml
+# Considere o seguinte docker-compose.yaml
+https://devhints.io/docker-compose
 
 ```yaml
 services:
-  <service_name>: Nome do serviço ou container. Pode ser postgres, redis, web, etc
-    container_name: name_of_container # se não especificado é o mesmo nome do serviço
-    # Build de um Dockerfile local
+  service_name: #Nome do serviço ou container. Pode ser postgres, redis, web, db, etc
+    # Building
+    ## Build de um Dockerfile local
     build: .
-    # Build de um Dockerfile customizado
+    ## Build de um Dockerfile customizado
     build:
       context: ./path
       dockerfile: Dockerfile.dev
-    # Build de uma imagem
-    image: `image_name`:`tag`
-    # Nome do container
+    ## Build de uma imagem, informar o tag é importante
+    image: python:3.12
+    # Portas
     ports:
       - "3000"
-      - "8000:80" # host_port:container_port
-    # Expoe uma porta para um serviço vinculado (não para host)
+      ## host_port:container_port
+      - "8000:80" 
+    ## Expoe uma porta para um serviço vinculado (não para host)
     expose: ["3000"]
+    # Variáveis de ambiente
+    ## Use qualquer um destes formatos
+    enviroment:
+      VAR_NAME: var_value
+    enviroment:
+      - VAR_NAME=var_value
     env_file:
       - .env
+    env_file: [.env,.env.development]
     volumes:
       # podemos criar um volume ligado a um volume do docker
       - <volume_name>:/container_path # volume_docker:container_path
@@ -42,13 +51,28 @@ services:
     restart: always
     depends_on:
       - service_name
+    # Links
+    ## makes the db service available as the hostname
+    # (implies depends_on)
+    links:
+      - db:database
+      - redis
+    # command to execute
+    command: bundle exec thin -p 3000
 volumes: 
   # Informe o nome do volume do docker.
   <volume_name>:
+# creates a custom network called `frontend`
+networks:
+  frontend:  
 ```
+
+A clásula CMD no Dockerfile é o mesmo que o comand no docker-compose
 
 # Tutoriais
 
 https://github.com/docker/awesome-compose/blob/master/official-documentation-samples/django/README.md
 
 https://devhints.io/docker-compose
+
+https://gist.github.com/jonlabelle/bd667a97666ecda7bbc4f1cc9446d43a
