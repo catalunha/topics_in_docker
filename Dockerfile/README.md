@@ -15,6 +15,7 @@ EXPOSE [`port_container`] | Expoe que porta o container escuta
 
 ## Dockerfile para Rabbitmq
 
+
 ## Dockerfile para Redis
 
 ## Dockerfile para Python

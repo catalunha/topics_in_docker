@@ -56,4 +56,6 @@ https://youtu.be/FnGxwmtUK0c
 Ja assistida e transcrita aqui
 
 ### Docker e Docker Compose na prática | dockerizando uma aplicação Django com Celery | py_live #012
+Dados nesta pasta: docker-compose/docker_compose_3
 https://youtu.be/R8LyH6TCIUM
+Visto e transcrito.
