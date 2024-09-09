@@ -7,7 +7,9 @@ Comando | Descrição
 docker container cp `container_name`:`container_path` `host_path` | Copiar um arquivo do container para o host
 docker container cp `host_path` `container_name`:`container_path`| Copiar um arquivo do host para o container
 docker container exec -it `container_name` `shell` | Inicia o shell dentro do container em execução. Onde `shell` pode ser bash, sh, etc
-docker container ls -a | Mostra uma lista de todos os containers
+docker container ls | Mostra uma lista de todos os containers ativos
+docker container ls -a | Mostra uma lista de todos os containers ativos e inativos
+docker container run `container_name`:`image_name` | Executa um container
 docker container rename `old_container_name` `new_container_name` | renomear um container
 docker container rm `container_name` | Deleta um container
 docker container run --name `container_name` `image_name` | ... e define um nome a este container
