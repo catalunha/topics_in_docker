@@ -9,7 +9,9 @@ docker compose start | Inicia os serviços
 docker compose stop | Para os serviços
 docker compose down | Para os serviços e remove os serviços, rede, etc
 docker compose ls | Lista os arquivos de componse em execução
+docker compose ps | Lista os containers de componse em execução
 docker compose -p `compose_project_name` ps | Lista os containers de um projeto compose
+docker compose -f <compose_filename.yml> up/down/etc | Executa ação e compose específico
 
 # Considere o seguinte docker-compose.yaml
 https://devhints.io/docker-compose
